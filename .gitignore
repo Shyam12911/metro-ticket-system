@@ -1,0 +1,18 @@
+# Ignore build output
+/target/
+
+# IDE files
+*.iml
+/.idea/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Maven wrapper
+/.mvn/
+
+# class files
+**/*.class
