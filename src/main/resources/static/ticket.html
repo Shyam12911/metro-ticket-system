@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Ticket</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <main class="container">
+    <section id="ticketInfo"></section>
+  </main>
+  <script>
+    // simple script to read query params and show message
+    const url = new URL(window.location);
+    const id = url.searchParams.get('id');
+    document.getElementById('ticketInfo').innerText = id ? `Ticket booked id: ${id}` : 'No ticket';
+  </script>
+</body>
+</html>
