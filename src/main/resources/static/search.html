@@ -1,34 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Search Metro Journeys</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/css/styles.css">
+  <title>Search Metro</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/theme.css">
 </head>
 <body>
 
-  <header class="hero">
-    <div class="hero-content">
-      <h1>Search Metro</h1>
-      <p>Find your journey easily</p>
-    </div>
-  </header>
+<div class="header">Search Metro Route</div>
 
-  <main class="container">
-    <section class="search-card">
-      <h2>Journey Search</h2>
+<div class="container">
+  <div class="card">
+    <input id="source" placeholder="From Station">
+    <input id="destination" placeholder="To Station">
+    <button class="primary-btn" onclick="search()">Search</button>
+  </div>
 
-      <div class="form-row">
-        <input type="text" id="origin" placeholder="From (e.g. Pune)">
-        <input type="text" id="destination" placeholder="To (e.g. Mumbai)">
-        <button onclick="searchJourney()">Search</button>
-      </div>
+  <div id="results"></div>
+</div>
 
-      <div id="results"></div>
-    </section>
-  </main>
-
-  <script src="/js/app.js"></script>
+<script src="js/search.js"></script>
 </body>
 </html>

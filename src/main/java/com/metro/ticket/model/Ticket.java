@@ -1,6 +1,7 @@
 package com.metro.ticket.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class Ticket {
@@ -9,50 +10,52 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Journey journey;
+    @Enumerated(EnumType.STRING)
+    private BookingStatus status;
 
     @ManyToOne
     private User user;
 
-    private int seatCount;
-    private double totalPrice;
+    @ManyToOne
+    private Journey journey;
 
-    // ===== SETTERS =====
-    public void setJourney(Journey journey) {
-        this.journey = journey;
-    }
+    private LocalDateTime createdAt;
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    // ===== GETTERS & SETTERS =====
 
-    public void setSeatCount(int seatCount) {
-        this.seatCount = seatCount;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    // ===== GETTERS =====
     public Long getId() {
         return id;
     }
 
-    public Journey getJourney() {
-        return journey;
+    public BookingStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BookingStatus status) {
+        this.status = status;
     }
 
     public User getUser() {
         return user;
     }
 
-    public int getSeatCount() {
-        return seatCount;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public double getTotalPrice() {
-        return totalPrice;
+    public Journey getJourney() {
+        return journey;
+    }
+
+    public void setJourney(Journey journey) {
+        this.journey = journey;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

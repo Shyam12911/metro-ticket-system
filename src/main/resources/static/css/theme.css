@@ -1,0 +1,20 @@
+.header {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: white;
+  padding: 18px;
+  text-align: center;
+  font-size: 20px;
+}
+
+.primary-btn {
+  background: #f97316;
+  color: white;
+}
+
+.primary-btn:hover {
+  background: #ea580c;
+}
+
+.route-card {
+  border-left: 6px solid #2563eb;
+}

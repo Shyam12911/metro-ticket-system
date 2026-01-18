@@ -1,9 +1,12 @@
 package com.metro.ticket.controller;
 
+import org.springframework.web.bind.annotation.*;
+
 import com.metro.ticket.dto.BookingRequest;
 import com.metro.ticket.model.Ticket;
 import com.metro.ticket.service.TicketService;
-import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -15,12 +18,11 @@ public class BookingController {
         this.ticketService = ticketService;
     }
 
-    @PostMapping
-    public Ticket book(@RequestBody BookingRequest request) {
-        return ticketService.book(
-                request.getJourneyId(),
-                request.getName(),
-                request.getEmail(),
-                request.getSeats());
+    @PostMapping("/initiate")
+    public Ticket initiate(@RequestBody BookingRequest request) {
+
+        return ticketService.initiateBooking(
+                Optional.ofNullable(request.getUserId()),
+                Optional.ofNullable(request.getJourneyId()));
     }
 }

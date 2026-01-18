@@ -5,32 +5,35 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Journey {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String origin;
+
+    private String source;
     private String destination;
+
     private LocalDateTime departureTime;
+
     private double fare;
 
-    public Journey() {
-    }
+    private int availableSeats;
 
-    // getters and setters
+    @Version
+    private int version;
+
+    // ===== GETTERS & SETTERS =====
+
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getSource() {
+        return source;
     }
 
-    public String getOrigin() {
-        return origin;
-    }
-
-    public void setOrigin(String origin) {
-        this.origin = origin;
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public String getDestination() {
@@ -55,5 +58,13 @@ public class Journey {
 
     public void setFare(double fare) {
         this.fare = fare;
+    }
+
+    public int getAvailableSeats() {
+        return availableSeats;
+    }
+
+    public void setAvailableSeats(int availableSeats) {
+        this.availableSeats = availableSeats;
     }
 }

@@ -21,7 +21,7 @@ public class JourneyService {
 
     public Journey createSample(String origin, String dest, LocalDateTime time, double fare) {
         Journey j = new Journey();
-        j.setOrigin(origin);
+        j.setSource(origin);
         j.setDestination(dest);
         j.setDepartureTime(time);
         j.setFare(fare);
