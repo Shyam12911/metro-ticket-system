@@ -1,64 +1,98 @@
 package com.metro.ticket.service;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.time.LocalDateTime;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.metro.ticket.model.BookingStatus;
-import com.metro.ticket.model.Journey;
+import com.metro.ticket.model.Station;
 import com.metro.ticket.model.Ticket;
-import com.metro.ticket.repository.JourneyRepository;
+import com.metro.ticket.repository.StationRepository;
 import com.metro.ticket.repository.TicketRepository;
-import com.metro.ticket.repository.UserRepository;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Service
 public class TicketService {
 
     private final TicketRepository ticketRepo;
-    private final JourneyRepository journeyRepo;
-    private final UserRepository userRepo;
+    private final StationRepository stationRepo;
+    private final QRCodeService qrService;
 
-    public TicketService(TicketRepository t,
-            JourneyRepository j,
-            UserRepository u) {
-        this.ticketRepo = t;
-        this.journeyRepo = j;
-        this.userRepo = u;
+    public TicketService(
+            TicketRepository ticketRepo,
+            StationRepository stationRepo,
+            QRCodeService qrService) {
+        this.ticketRepo = ticketRepo;
+        this.stationRepo = stationRepo;
+        this.qrService = qrService;
     }
 
-    @Transactional
-    public Ticket initiateBooking(Optional<Long> userIdOpt,
-            Optional<Long> journeyIdOpt) {
+    /*
+     * =====================
+     * ISSUE TICKET
+     * =====================
+     */
+    public Ticket issueRouteTicket(String fromStation, String toStation) {
 
-        // ---- EXPLICIT NULL CONTRACT ----
-        Long userId = userIdOpt.orElseThrow(() -> new IllegalArgumentException("userId is required"));
+        Station from = stationRepo.findByNameIgnoreCase(fromStation.trim())
+                .orElseThrow(() -> new RuntimeException("Invalid FROM station: " + fromStation));
 
-        Long journeyId = journeyIdOpt.orElseThrow(() -> new IllegalArgumentException("journeyId is required"));
+        Station to = stationRepo.findByNameIgnoreCase(toStation.trim())
+                .orElseThrow(() -> new RuntimeException("Invalid TO station: " + toStation));
 
-        // ---- LOAD JOURNEY (NON-NULL GUARANTEE) ----
-        Journey journey = journeyRepo
-                .findById(Objects.requireNonNull(journeyId))
-                .orElseThrow(() -> new RuntimeException("Journey not found"));
+        Ticket t = new Ticket();
 
-        if (journey.getAvailableSeats() <= 0) {
-            throw new RuntimeException("No seats available");
-        }
+        t.setFromStation(fromStation);
+        t.setToStation(toStation);
+        t.setStatus("ACTIVE");
 
-        // ---- RESERVE CAPACITY ----
-        journey.setAvailableSeats(journey.getAvailableSeats() - 1);
+        String fromLine = from.getLine() == null ? "" : from.getLine();
+        String toLine = to.getLine() == null ? "" : to.getLine();
 
-        // ---- CREATE TICKET (PAYMENT PENDING) ----
-        Ticket ticket = new Ticket();
-        ticket.setUser(
-                userRepo.findById(Objects.requireNonNull(userId))
-                        .orElseThrow(() -> new RuntimeException("User not found")));
-        ticket.setJourney(journey);
-        ticket.setStatus(BookingStatus.PAYMENT_PENDING);
-        ticket.setCreatedAt(LocalDateTime.now());
+        t.setPrimaryLine(fromLine);
+        t.setChangeRequired(!fromLine.equals(toLine));
+        t.setIssuedAt(LocalDateTime.now());
+        t.setValidUpto(LocalDateTime.now().plusHours(2));
 
-        return ticketRepo.save(ticket);
+        int stationCount = Math.abs(from.getSequenceNo() - to.getSequenceNo()) + 1;
+        t.setFare(BigDecimal.valueOf(stationCount * 5));
+
+        String rawData = t.getFromStation() + "|" + t.getToStation() + "|" + System.currentTimeMillis();
+
+        String token = java.util.Base64.getEncoder()
+                .encodeToString(rawData.getBytes());
+
+        t.setQrToken(token);
+        t.setQrCode(qrService.generateQrBytes(token));
+        return ticketRepo.save(t);
+    }
+
+    /*
+     * =====================
+     * GET TICKET
+     * =====================
+     */
+    public Ticket getTicketById(Long id) {
+        return ticketRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+    }
+
+    /*
+     * =====================
+     * GET QR
+     * =====================
+     */
+    public byte[] getQr(Long id) {
+        Ticket t = getTicketById(id);
+        return t.getQrCode();
+    }
+
+    /*
+     * =====================
+     * VALIDATE
+     * =====================
+     */
+    public Ticket validateTicket(Long id) {
+        Ticket t = getTicketById(id);
+        t.setStatus("USED");
+        return ticketRepo.save(t);
     }
 }

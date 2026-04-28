@@ -12,17 +12,15 @@ public class Journey {
 
     private String source;
     private String destination;
-
-    private LocalDateTime departureTime;
-
+    private int distanceKm;
     private double fare;
 
-    private int availableSeats;
+    @Column(name = "departure_time", nullable = false)
+    private LocalDateTime departureTime;
 
-    @Version
-    private int version;
-
-    // ===== GETTERS & SETTERS =====
+    public Journey() {
+    }
+    // ===== GETTERS & SETTERS (REQUIRED) =====
 
     public Long getId() {
         return id;
@@ -44,12 +42,12 @@ public class Journey {
         this.destination = destination;
     }
 
-    public LocalDateTime getDepartureTime() {
-        return departureTime;
+    public int getDistanceKm() {
+        return distanceKm;
     }
 
-    public void setDepartureTime(LocalDateTime departureTime) {
-        this.departureTime = departureTime;
+    public void setDistanceKm(int distanceKm) {
+        this.distanceKm = distanceKm;
     }
 
     public double getFare() {
@@ -60,11 +58,11 @@ public class Journey {
         this.fare = fare;
     }
 
-    public int getAvailableSeats() {
-        return availableSeats;
+    public LocalDateTime getDepartureTime() {
+        return departureTime;
     }
 
-    public void setAvailableSeats(int availableSeats) {
-        this.availableSeats = availableSeats;
+    public void setDepartureTime(LocalDateTime departureTime) {
+        this.departureTime = departureTime;
     }
 }

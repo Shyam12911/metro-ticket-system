@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pune Metro – Admin Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+
+<header class="top-bar">
+    <div class="logo-box">
+        <img src="/images/pune-metro-logo.png" alt="Pune Metro Logo">
+        <div>
+            <div class="title">PUNE METRO</div>
+            <div class="subtitle">Admin Panel</div>
+        </div>
+    </div>
+    <button id="logoutBtn" class="hidden" onclick="logout()">Logout</button>
+</header>
+
+<main class="container">
+
+    <!-- LOGIN -->
+    <section id="loginCard" class="card">
+        <h2>Admin Login</h2>
+
+        <label>Username</label>
+        <input id="username" type="text" placeholder="admin">
+
+        <label>Password</label>
+        <input id="password" type="password" placeholder="••••••">
+
+        <button class="primary-btn" onclick="login()">LOGIN</button>
+
+        <div id="loginError" class="error"></div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="hidden">
+
+        <section class="card">
+            <h2>Dashboard</h2>
+            <div class="stats">
+                <div class="stat-box">
+                    <span>Total Tickets</span>
+                    <strong id="totalTickets">–</strong>
+                </div>
+                <div class="stat-box">
+                    <span>Today Revenue</span>
+                    <strong id="todayRevenue">₹ –</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>All Tickets</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Fare</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="ticketTable"></tbody>
+            </table>
+        </section>
+
+        <section class="card">
+            <h2>Reports</h2>
+            <button onclick="exportCsv()">Export CSV</button>
+        </section>
+
+    </section>
+
+</main>
+
+<script src="/admin.js"></script>
+</body>
+</html>

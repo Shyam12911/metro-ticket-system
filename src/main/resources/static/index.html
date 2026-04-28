@@ -1,41 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Pune Metro</title>
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/theme.css">
+    <meta charset="UTF-8">
+    <title>Pune Metro Ticket Booking</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
-<header class="header">
-  <a href="index.html">
-    <img src="assets/images/logo.svg" alt="Pune Metro" height="28">
-  </a>
+<header class="top-bar">
+    <div class="logo-box">
+        <img src="/images/pune-metro-logo.png" alt="Pune Metro Logo">
+        <div class="metro-logo">
+            <div class="title">PUNE METRO</div>
+            <div class="subtitle">Maha Metro</div>
+        </div>
+    </div>
+
+    <button id="darkToggle" class="dark-toggle">🌙</button>
 </header>
 
-<div class="container">
-  <div class="card">
+<main class="container">
 
-    <!-- Decorative metro image -->
-    <img
-      src="assets/images/metro-train.svg"
-      alt="Metro Train"
-      style="width:160px;margin:0 auto 16px;display:block;"
-    >
+    <!-- BOOKING -->
+    <section class="card">
+        <h2>Book Metro Ticket</h2>
 
-    <h3>Welcome to Pune Metro</h3>
+        <label>From Station</label>
+        <select id="fromStation"></select>
 
-    <!-- QR placeholder (example for ticket/scan section) -->
-    <img
-      src="assets/images/qr-placeholder.svg"
-      alt="QR Code"
-      width="160"
-      style="margin:16px auto;display:block;"
-    >
+        <button type="button" class="swap-btn" onclick="swapStations()">⇅</button>
 
-  </div>
-</div>
+        <label>To Station</label>
+        <select id="toStation"></select>
 
+       <button id="bookBtn" class="primary-btn" disabled>
+    BOOK TICKET
+</button>
+    </section>
+
+    <!-- LOADER -->
+    <section id="loader" class="card skeleton hidden">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line short"></div>
+    </section>
+
+    <!-- TICKET -->
+    <section id="ticketSection" class="card hidden slide-in">
+        <h2>Your Ticket</h2>
+
+        <!-- IMPORTANT: keep empty, JS will inject structured HTML -->
+        <div id="ticketBox"></div>
+
+        <div class="actions">
+            <button class="secondary-btn" onclick="openPrint()">Print Ticket</button>
+            <button class="secondary-btn" onclick="openQR()">View QR</button>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    © Maha Metro – Pune Metro Rail Corporation
+</footer>
+
+<script src="/app.js"></script>
 </body>
 </html>
